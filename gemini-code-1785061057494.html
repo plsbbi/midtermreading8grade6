@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Lê Hằng English</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b8b;
+            --primary-hover: #ff4770;
+            --secondary: #8854c0;
+            --accent-yellow: #fdcb6e;
+            --accent-teal: #00c9a7;
+            --correct: #00d26a;
+            --wrong: #ff4757;
+            --highlight: #fef08a;
+            --card-bg: #ffffff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --border-radius: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: text; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ctext x='10' y='30' font-size='22'%3E🎒%3C/text%3E%3Ctext x='70' y='40' font-size='20'%3E⭐%3C/text%3E%3Ctext x='30' y='90' font-size='22'%3E✏️%3C/text%3E%3Ctext x='80' y='100' font-size='20'%3E🏫%3C/text%3E%3C/svg%3E");
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .header-title-container { display: flex; align-items: center; gap: 12px; }
+        .teacher-tag {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 5px 14px; border-radius: 20px;
+            font-size: 0.9rem; font-weight: 800; letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px rgba(255, 107, 139, 0.3);
+        }
+
+        .controls-bar { display: flex; align-items: center; gap: 15px; }
+        .timer-badge {
+            background: #fff; border: 2px solid var(--primary); border-radius: 25px;
+            padding: 4px 15px; display: flex; align-items: center; gap: 8px;
+            font-weight: 800; color: var(--primary); box-shadow: 0 3px 0 var(--primary);
+        }
+        .btn-timer {
+            background: var(--primary); color: white; border: none; padding: 5px 12px;
+            border-radius: 15px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+            box-shadow: 0 3px 0 #d04a60; transition: all 0.2s;
+        }
+        .btn-timer:hover { transform: translateY(-2px); }
+
+        .progress-box {
+            display: flex; align-items: center; gap: 10px; background: white;
+            padding: 4px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .progress-bar-bg { width: 90px; height: 10px; background: #dfe6e9; border-radius: 5px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-teal), var(--correct)); transition: width 0.3s ease; }
+        .progress-text { font-weight: 800; font-size: 0.85rem; color: var(--accent-teal); }
+
+        .btn-submit-main {
+            background: linear-gradient(135deg, #00c9a7, #00d26a); color: white; border: none;
+            padding: 8px 18px; border-radius: 20px; font-weight: 900; font-size: 0.95rem;
+            cursor: pointer; box-shadow: 0 4px 0 #00997b; transition: all 0.2s;
+        }
+        .btn-submit-main:hover { transform: translateY(-2px); }
+
+        .main-container { display: flex; flex: 1; height: calc(100vh - 65px); overflow: hidden; padding: 12px; gap: 12px; }
+        .pane {
+            flex: 1; background: rgba(255, 255, 255, 0.93); backdrop-filter: blur(10px);
+            border-radius: var(--border-radius); box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            display: flex; flex-direction: column; overflow: hidden; border: 2px solid rgba(255,255,255,0.8);
+        }
+
+        .pane-header {
+            padding: 12px 20px; background: linear-gradient(135deg, rgba(255,107,139,0.1), rgba(136,84,192,0.1));
+            border-bottom: 2px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between;
+        }
+        .pane-title { font-size: 1.1rem; font-weight: 800; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
+        .pane-content { flex: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
+
+        .passage-title { font-size: 1.25rem; font-weight: 900; color: var(--primary); margin-bottom: 15px; text-align: center; border-bottom: 2px dashed #fecfef; padding-bottom: 10px; }
+        .paragraph-card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 15px; border: 1px solid #f0f0f0; box-shadow: 0 3px 10px rgba(0,0,0,0.03); position: relative; }
+        .paragraph-text { line-height: 1.8; font-size: 1.05rem; color: #2d3436; }
+        .user-highlight { background-color: var(--highlight); padding: 2px 4px; border-radius: 4px; }
+
+        .btn-translate {
+            background: #fbfaff; border: 1px dashed var(--secondary); color: var(--secondary);
+            border-radius: 12px; padding: 6px 14px; font-size: 0.85rem; font-weight: 800;
+            cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+        }
+        .btn-translate:hover { background: #f0e6ff; transform: scale(1.02); }
+        .translation-box { display: none; margin-top: 12px; padding: 14px; background: #f8f5ff; border-left: 4px solid var(--secondary); border-radius: 8px; font-size: 0.95rem; color: #4a4a4a; line-height: 1.7; }
+
+        .glossary-container { margin-top: 25px; background: #fff; border-radius: 16px; padding: 18px; border: 2px solid #f0e6ff; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .glossary-title { font-size: 1.05rem; font-weight: 800; color: var(--secondary); margin-bottom: 12px; }
+        .glossary-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .glossary-table th { background: #f0e6ff; color: var(--secondary); text-align: left; padding: 8px 12px; font-weight: 800; }
+        .glossary-table td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
+
+        .question-card { background: #fff; border-radius: 16px; padding: 18px; margin-bottom: 18px; border: 2px solid #f0f0f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .question-header { font-weight: 800; font-size: 1.05rem; color: var(--text-dark); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+        .q-number { background: var(--primary); color: white; border-radius: 8px; padding: 2px 8px; font-size: 0.85rem; flex-shrink: 0; }
+
+        .mc-options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .mc-option {
+            background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px;
+            padding: 10px 14px; cursor: pointer; font-weight: 600;
+            display: flex; align-items: center; gap: 10px; transition: all 0.2s;
+            box-shadow: 0 3px 0 #dee2e6;
+        }
+        .mc-option:hover { transform: translateY(-2px); border-color: var(--primary); background: #fff; }
+        .mc-option.selected-correct { background: #e6f9f0 !important; border-color: var(--correct) !important; color: var(--correct) !important; box-shadow: 0 3px 0 #00b359 !important; }
+        .mc-option.selected-wrong { background: #ffeef0 !important; border-color: var(--wrong) !important; color: var(--wrong) !important; box-shadow: 0 3px 0 #e03b4a !important; animation: shake 0.4s ease; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .btn-locate { background: #fff4e6; color: #d97706; border: 1px solid #fde68a; padding: 5px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+        .btn-locate:hover { background: #fef3c7; transform: scale(1.03); }
+
+        .explanation-box { display: none; margin-top: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 0.9rem; }
+        .exp-item { margin-bottom: 6px; line-height: 1.5; }
+        .exp-item strong { color: var(--secondary); }
+        .exp-synonym { background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: 700; color: #475569; display: inline-block; margin-top: 4px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-card { background: white; border-radius: 24px; padding: 30px; width: 90%; max-width: 480px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-score { font-size: 3rem; font-weight: 900; color: var(--primary); margin: 15px 0; }
+        .btn-modal-close { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #d04a60; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title-container">
+            <span class="teacher-tag">Ms Lê Hằng English</span>
+        </div>
+
+        <div class="controls-bar">
+            <div class="timer-badge">
+                <span>⏱️</span>
+                <span id="timer-display">20:00</span>
+                <button class="btn-timer" id="btn-timer-toggle" onclick="toggleTimer()">BẮT ĐẦU TÍNH GIỜ</button>
+            </div>
+            <div class="progress-box">
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+                <span class="progress-text" id="progress-text">0%</span>
+            </div>
+            <button class="btn-submit-main" onclick="submitTest()">NỘP BÀI 🚀</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Left Pane: Reading Passage -->
+        <div class="pane">
+            <div class="pane-header">
+                <div class="pane-title"><span>📖</span> READING PASSAGE</div>
+                <small style="color:var(--text-muted); font-weight:700;">💡 Bôi đen văn bản để highlight</small>
+            </div>
+            <div class="pane-content" id="passage-container">
+                <h2 class="passage-title">My Best Friend Alex</h2>
+                
+                <div class="paragraph-card" id="para-1">
+                    <p class="paragraph-text">
+                        <span id="sent-1">I have many friends, but Alex is my best friend.</span>
+                        <span id="sent-2">He studies in my class.</span>
+                        <span id="sent-3">We go to school together.</span>
+                        <span id="sent-4">We also sit together to do our homework.</span>
+                        <span id="sent-5">He is good at studies, so he helps the students who are weak in studies.</span>
+                        <span id="sent-6">Alex is the monitor of our class.</span>
+                        <span id="sent-7">He always listens to and loves his teachers and parents.</span>
+                        <span id="sent-8">He is good at English.</span>
+                        <span id="sent-9">He has won many prizes for our school.</span>
+                        <span id="sent-10">He comes from a middle-class family.</span>
+                        <span id="sent-11">His father is a teacher and his mother is a housewife.</span>
+                        <span id="sent-12">He wears clean clothes.</span>
+                        <span id="sent-13">He leads a simple life.</span>
+                        <span id="sent-14">He is always regular.</span>
+                        <span id="sent-15">He is never late for school.</span>
+                        <span id="sent-16">He wants to become a doctor.</span>
+                        <span id="sent-17">All the teachers of our school love Alex.</span>
+                        <span id="sent-18">I am proud of him.</span>
+                    </p>
+                    <button class="btn-translate" onclick="toggleTranslation('trans-1')"><span>🌟</span> Mở dịch đoạn này</button>
+                    <div class="translation-box" id="trans-1">
+                        Tớ có nhiều bạn, nhưng Alex là bạn thân nhất của tớ. Cậu ấy học cùng lớp với tớ. Chúng tớ cùng nhau đi học. Chúng tớ cũng ngồi cạnh nhau để làm bài tập về nhà. Cậu ấy học giỏi, vì vậy cậu ấy giúp đỡ những bạn học sinh học yếu hơn. Alex là lớp trưởng của lớp chúng tớ. Cậu ấy luôn lắng nghe và yêu thương thầy cô, cha mẹ. Cậu ấy giỏi tiếng Anh. Cậu ấy đã giành được nhiều giải thưởng cho trường chúng tớ. Cậu ấy xuất thân từ một gia đình trung lưu. Bố cậu ấy là giáo viên và mẹ cậu ấy là nội trợ. Cậu ấy mặc quần áo sạch sẽ. Cậu ấy sống một cuộc sống giản dị. Cậu ấy luôn đúng giờ/điều độ. Cậu ấy không bao giờ đi học muộn. Cậu ấy muốn trở thành bác sĩ. Tất cả giáo viên ở trường đều yêu quý Alex. Tớ rất tự hào về cậu ấy.
+                    </div>
+                </div>
+
+                <!-- Glossary Table -->
+                <div class="glossary-container">
+                    <div class="glossary-title">📚 BẢNG TỪ VỰNG HỌC THUẬT (GLOSSARY)</div>
+                    <table class="glossary-table">
+                        <thead>
+                            <tr><th>Từ vựng</th><th>Loại từ</th><th>Nghĩa tiếng Việt</th><th>Từ đồng nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="font-weight:800; color:var(--primary);">Best friend</td><td>n</td><td>Bạn thân nhất</td><td>Close friend, pal</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Weak in studies</td><td>adj phrase</td><td>Học lực yếu/kém hơn</td><td>Struggling students</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Monitor</td><td>n</td><td>Lớp trưởng</td><td>Class leader, representative</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Middle-class</td><td>adj</td><td>Thuộc tầng lớp trung lưu</td><td>Average income family</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Housewife</td><td>n</td><td>Nội trợ</td><td>Homemaker</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Clean</td><td>adj</td><td>Sạch sẽ</td><td>Spotless, neat (>< dirty)</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Regular</td><td>adj</td><td>Đúng giờ, đều đặn</td><td>Punctual, consistent</td></tr>
+                            <tr><td style="font-weight:800; color:var(--primary);">Proud of</td><td>adj phrase</td><td>Tự hào về ai đó</td><td>Pleased with, honored</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Pane: Questions -->
+        <div class="pane">
+            <div class="pane-header">
+                <div class="pane-title"><span>✏️</span> EXERCISES & EXPLANATIONS</div>
+            </div>
+            <div class="pane-content" id="questions-container">
+                
+                <!-- Q1 -->
+                <div class="question-card">
+                    <div class="question-header"><span class="q-number">Câu 1</span><div>1. What is the topic of the passage?</div></div>
+                    <div class="mc-options">
+                        <div class="mc-option" onclick="checkMC(1, 'A', this)">A. My best class</div>
+                        <div class="mc-option" onclick="checkMC(1, 'B', this)">B. My best teacher</div>
+                        <div class="mc-option" onclick="checkMC(1, 'C', this)">C. My best friend</div>
+                        <div class="mc-option" onclick="checkMC(1, 'D', this)">D. My best school</div>
+                    </div>
+                    <button class="btn-locate" onclick="locateSentence('sent-1', 1)">📍 Dẫn chứng trong bài đọc</button>
+                    <div class="explanation-box" id="exp-1">
+                        <div class="exp-item"><strong>1. ĐÁP ÁN:</strong> C. My best friend</div>
+                        <div class="exp-item"><strong>2. ĐOẠN CHỨA ĐÁP ÁN:</strong> "I have many friends, but Alex is my best friend."</div>
+                        <div class="exp-item"><strong>3. DỊCH NGHĨA:</strong> Tớ có nhiều bạn, nhưng Alex là bạn thân nhất của tớ.</div>
+                        <div class="exp-synonym">💡 KEYWORD: Topic = Chủ đề chính bao quát cả đoạn văn</div>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="question-card">
+                    <div class="question-header"><span class="q-number">Câu 2</span><div>2. What is TRUE about Alex?</div></div>
+                    <div class="mc-options">
+                        <div class="mc-option" onclick="checkMC(2, 'A', this)">A. He often helps weak students.</div>
+                        <div class="mc-option" onclick="checkMC(2, 'B', this)">B. He plays sports very well.</div>
+                        <div class="mc-option" onclick="checkMC(2, 'C', this)">C. He is a vice-monitor in the class.</div>
+                        <div class="mc-option" onclick="checkMC(2, 'D', this)">D. He sometimes comes to class late.</div>
+                    </div>
+                    <button class="btn-locate" onclick="locateSentence('sent-5', 2)">📍 Dẫn chứng trong bài đọc</button>
+                    <div class="explanation-box" id="exp-2">
+                        <div class="exp-item"><strong>1. ĐÁP ÁN:</strong> A. He often helps weak students.</div>
+                        <div class="exp-item"><strong>2. ĐOẠN CHỨA ĐÁP ÁN:</strong> "He is good at studies, so he helps the students who are weak in studies."</div>
+                        <div class="exp-item"><strong>3. DỊCH NGHĨA:</strong> Cậu ấy học giỏi, vì vậy cậu ấy giúp đỡ những bạn học sinh yếu hơn.</div>
+                        <div class="exp-synonym">💡 KEYWORD: helps weak students = helps the students who are weak in studies</div>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="question-card">
+                    <div class="question-header"><span class="q-number">Câu 3</span><div>3. Alex has won some prizes in ______</div></div>
+                    <div class="mc-options">
+                        <div class="mc-option" onclick="checkMC(3, 'A', this)">A. Maths</div>
+                        <div class="mc-option" onclick="checkMC(3, 'B', this)">B. Computer science</div>
+                        <div class="mc-option" onclick="checkMC(3, 'C', this)">C. English</div>
+                        <div class="mc-option" onclick="checkMC(3, 'D', this)">D. literature</div>
+                    </div>
+                    <button class="btn-locate" onclick="locateSentence('sent-8', 3)">📍 Dẫn chứng trong bài đọc</button>
+                    <div class="explanation-box" id="exp-3">
+                        <div class="exp-item"><strong>1. ĐÁP ÁN:</strong> C. English</div>
+                        <div class="exp-item"><strong>2. ĐOẠN CHỨA ĐÁP ÁN:</strong> "He is good at English. He has won many prizes for our school."</div>
+                        <div class="exp-item"><strong>3. DỊCH NGHĨA:</strong> Cậu ấy giỏi tiếng Anh. Cậu ấy đã giành được nhiều giải thưởng cho trường.</div>
+                        <div class="exp-synonym">💡 KEYWORD: won prizes in English = won many prizes (sau câu He is good at English)</div>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="question-card">
+                    <div class="question-header"><span class="q-number">Câu 4</span><div>4. The word "clean" in line 6 is OPPOSITE in meaning to ______</div></div>
+                    <div class="mc-options">
+                        <div class="mc-option" onclick="checkMC(4, 'A', this)">A. dirty</div>
+                        <div class="mc-option" onclick="checkMC(4, 'B', this)">B. smart</div>
+                        <div class="mc-option" onclick="checkMC(4, 'C', this)">C. old</div>
+                        <div class="mc-option" onclick="checkMC(4, 'D', this)">D. fresh</div>
+                    </div>
+                    <button class="btn-locate" onclick="locateSentence('sent-12', 4)">📍 Dẫn chứng trong bài đọc</button>
+                    <div class="explanation-box" id="exp-4">
+                        <div class="exp-item"><strong>1. ĐÁP ÁN:</strong> A. dirty</div>
+                        <div class="exp-item"><strong>2. ĐOẠN CHỨA ĐÁP ÁN:</strong> "He wears clean clothes."</div>
+                        <div class="exp-item"><strong>3. DỊCH NGHĨA:</strong> Cậu ấy mặc quần áo sạch sẽ.</div>
+                        <div class="exp-synonym">💡 KEYWORD: clean (sạch sẽ) >< dirty (bẩn, mất vệ sinh) [Trái nghĩa]</div>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="question-card">
+                    <div class="question-header"><span class="q-number">Câu 5</span><div>5. What does the author feel about Alex?</div></div>
+                    <div class="mc-options">
+                        <div class="mc-option" onclick="checkMC(5, 'A', this)">A. He is proud of Alex.</div>
+                        <div class="mc-option" onclick="checkMC(5, 'B', this)">B. He is reliable on Alex.</div>
+                        <div class="mc-option" onclick="checkMC(5, 'C', this)">C. He is lucky to have Alex as his friend.</div>
+                        <div class="mc-option" onclick="checkMC(5, 'D', this)">D. He is excited about Alex.</div>
+                    </div>
+                    <button class="btn-locate" onclick="locateSentence('sent-18', 5)">📍 Dẫn chứng trong bài đọc</button>
+                    <div class="explanation-box" id="exp-5">
+                        <div class="exp-item"><strong>1. ĐÁP ÁN:</strong> A. He is proud of Alex.</div>
+                        <div class="exp-item"><strong>2. ĐOẠN CHỨA ĐÁP ÁN:</strong> "I am proud of him."</div>
+                        <div class="exp-item"><strong>3. DỊCH NGHĨA:</strong> Tớ rất tự hào về cậu ấy.</div>
+                        <div class="exp-synonym">💡 KEYWORD: feel about Alex = proud of him</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="results-modal">
+        <div class="modal-card">
+            <h2>🎉 KẾT QUẢ BÀI LÀM 🎉</h2>
+            <div class="modal-score" id="modal-score-display">0 / 5</div>
+            <div class="modal-comment" id="modal-comment-display">Cùng cố gắng hơn nhé!</div>
+            <button class="btn-modal-close" onclick="closeModal()">ĐÓNG & XEM LẠI BÀI</button>
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:2000;"></canvas>
+
+    <script>
+        const answersDB = { 1: "C", 2: "A", 3: "C", 4: "A", 5: "A" };
+        let userAnswers = {};
+        let timerSeconds = 20 * 60;
+        let timerInterval = null;
+        let isTimerRunning = false;
+
+        function toggleTranslation(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkMC(qNum, selected, element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.mc-option').forEach(el => el.classList.remove('selected-correct', 'selected-wrong'));
+
+            userAnswers[qNum] = selected;
+            const correctAns = answersDB[qNum];
+
+            if (selected === correctAns) {
+                element.classList.add('selected-correct');
+                playAudio('correct');
+                triggerConfetti();
+            } else {
+                element.classList.add('selected-wrong');
+                playAudio('wrong');
+                parent.querySelectorAll('.mc-option').forEach(el => {
+                    if (el.innerText.startsWith(correctAns)) el.classList.add('selected-correct');
+                });
+            }
+
+            document.getElementById(`exp-${qNum}`).style.display = 'block';
+            updateProgress();
+        }
+
+        function locateSentence(sentId, qNum) {
+            document.querySelectorAll('.paragraph-card span').forEach(s => s.style.backgroundColor = 'transparent');
+            const sent = document.getElementById(sentId);
+            if (sent) {
+                sent.style.backgroundColor = 'var(--highlight)';
+                sent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            document.getElementById(`exp-${qNum}`).style.display = 'block';
+        }
+
+        function updateProgress() {
+            let answered = Object.keys(userAnswers).length;
+            let pct = Math.round((answered / 5) * 100);
+            document.getElementById('progress-fill').style.width = pct + '%';
+            document.getElementById('progress-text').innerText = pct + '%';
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('btn-timer-toggle');
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                btn.innerText = "TIẾP TỤC";
+            } else {
+                isTimerRunning = true;
+                btn.innerText = "TẠM DỪNG";
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    const mins = Math.floor(timerSeconds / 60);
+                    const secs = timerSeconds % 60;
+                    document.getElementById('timer-display').innerText = 
+                        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        alert("⏱️ Đã hết giờ làm bài. Bạn vẫn có thể tiếp tục làm nha!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function submitTest() {
+            let correct = 0;
+            for (let q in userAnswers) {
+                if (userAnswers[q] === answersDB[q]) correct++;
+            }
+            document.getElementById('modal-score-display').innerText = `${correct} / 5`;
+            let msg = correct === 5 ? "🌟 TUYỆT ĐỐI 100%! BẠN LÀ THIÊN TÀI! 🌟" : "🎉 LÀM TỐT LẮM! HÃY ÔN LẠI VÀ HOÀN THÀNH HẾT NHÉ!";
+            document.getElementById('modal-comment-display').innerText = msg;
+            document.getElementById('results-modal').style.display = 'flex';
+            triggerConfetti();
+        }
+
+        function closeModal() { document.getElementById('results-modal').style.display = 'none'; }
+
+        let audioCtx = null;
+        function playAudio(type) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            if (type === 'correct') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(130.81, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        document.addEventListener('mouseup', () => {
+            const sel = window.getSelection();
+            if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+            const range = sel.getRangeAt(0);
+            const container = document.getElementById('passage-container');
+            if (container.contains(range.commonAncestorContainer)) {
+                const span = document.createElement('span');
+                span.className = 'user-highlight';
+                try { range.surroundContents(span); } catch(e){}
+                sel.removeAllRanges();
+            }
+        });
+
+        function triggerConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const particles = [];
+            const colors = ['#ff6b8b', '#8854c0', '#fdcb6e', '#00c9a7', '#00d26a'];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: canvas.width / 2, y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12 - 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 8 + 4, life: 100
+                });
+            }
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    if (p.life > 0) {
+                        alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 2;
+                        ctx.fillStyle = p.color; ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                    }
+                });
+                if (alive) requestAnimationFrame(render);
+            }
+            render();
+        }
+    </script>
+</body>
+</html>
